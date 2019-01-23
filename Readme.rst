@@ -32,13 +32,20 @@ as this is used is by the ActivityPub implementation.
 
 Instructions
 ------------
-1. Generate a blank ``static-website-activitypub.conf`` file to somewhere using:
+1. Generate a default ``static-website-activitypub.yaml`` file to somewhere using:
 
-    static-website-activitypub -w static-website-activitypub.conf path/to/your/public/html/directory
+    static-website-activitypub -w static-website-activitypub.yaml \
+        --serve-directory path/to/your/public/html/directory \
+        --posts-directory path/to/your/blog/posts/source/directory \
+        --regenerate-command "shell script for regenerating the website" \
+        --user-account username@domain.com \
+        --website https://www.domain.com
 
-2. Run ``static-website-activitypub -c path/to/your/static-website-activitypub.conf``,
+Customise the yaml script if you need to.
+
+2. Run ``static-website-activitypub -c path/to/your/static-website-activitypub.yaml``,
 or you can specify all the configuation options on the command line, or by
-environment variables.
+environment variables (see output from ``--help``).
 
 3. Deploy to production using any of the mechanisms listed at
 http://docs.cherrypy.org/en/latest/deploy.html, which includes the
