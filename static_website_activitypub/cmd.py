@@ -12,7 +12,7 @@ def abspath(path):
         return os.path.abspath(path)
     return path
 
-def main(argv = sys.argv):
+def main(argv = sys.argv, testing = False):
     argp = ArgParser(prog = 'static-website-activitypub',
         description =
     r'''A CherryPy-based Python web server which implements the ActivityPub
@@ -22,7 +22,7 @@ def main(argv = sys.argv):
         auto_env_var_prefix = 'SWA_',
         args_for_setting_config_path = ['-c', '--config-file'],
         args_for_writing_out_config_file = ['-w', '--write-out-config-file'])
-    argp.add_argument('-q', '--quiet', action = "store_true", default = False, help = 'print nothing to stdout')
+    argp.add_argument('-q', '--quiet', action = "store_true", default = False, help = 'print nothing to stdout, and enable production mode.')
     argp.add_argument('-b', '--bind', dest = "bind_address", metavar = 'ADDRESS', default = '127.0.0.1', help = 'address to run server upon. Defaults to 127.0.0.1.')
     argp.add_argument('-p', '--port', dest = 'bind_port', metavar = "PORTNO", type = int, default = 8080, help = 'port to run server upon. Defaults to 8080.')
     argp.add_argument('--post-format', dest = 'post_format', metavar = "FORMAT", default = 'yaml-front-matter', help = 'how to write the post. Options include: yaml-front-matter', choices = ['yaml-front-matter'])
@@ -54,13 +54,15 @@ def main(argv = sys.argv):
         print('FATAL: website is not in URL format, cannot continue!', file = sys.stderr)
         sys.exit(1)
     if not args.posts_directory:
-        print('WARNING: posts-directory is not set, ActivityPub service will not be able to write posts!', file = sys.stderr)
+        if not args.quiet:
+            print('WARNING: posts-directory is not set, ActivityPub service will not be able to write posts!', file = sys.stderr)
         args.posts_directory = None
     elif not os.path.isabs(args.posts_directory) or not os.path.exists(args.posts_directory):
         print('FATAL: posts-directory is set to "' + args.posts_directory + '" which is not absolute, or doesn\'t exist', file = sys.stderr)
         sys.exit(1)
     if not args.regenerate_command:
-        print('WARNING: regenerate-command is not set, ActivityPub service will not be able to regenerate the static website after writing a new post!', file = sys.stderr)
+        if not args.quiet:
+            print('WARNING: regenerate-command is not set, ActivityPub service will not be able to regenerate the static website after writing a new post!', file = sys.stderr)
         args.regenerate_command = None
         
     cherrypy.config.update({
@@ -68,6 +70,14 @@ def main(argv = sys.argv):
         'server.socket_port' : args.bind_port,
         'log.screen' : not args.quiet,
     })
+    if testing:
+        cherrypy.config.update({
+            'environment' : 'test_suite'
+        })
+    elif args.quiet:
+        cherrypy.config.update({
+            'environment' : 'production'
+        })
     conf = {
         '/' : {
             'tools.staticdir.on' : True,
@@ -84,8 +94,12 @@ def main(argv = sys.argv):
     cherrypy.tree.mount(Root(args, conf), '/', conf)
     cherrypy.engine.signals.subscribe()
     cherrypy.engine.start()
-    cherrypy.engine.block()
+    if not testing:
+        cherrypy.engine.block()
+    else:
+        yield 0
+    cherrypy.engine.exit()
     return 0
         
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main().next())

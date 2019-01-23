@@ -22,7 +22,7 @@ class WellKnown(object):
            'tools.encode.on' : True,
            'tools.encode.encoding' : 'utf-8',
            'tools.response_headers.on': True,
-           'tools.response_headers.headers': [('Content-Type', 'application/json')],
+           'tools.response_headers.headers': [('Content-Type', 'application/jrd+json')],
         }
 
     @cherrypy.expose

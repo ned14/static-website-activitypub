@@ -9,8 +9,11 @@ import cherrypy
 # - You can GET from someone's outbox to see what messages they've posted (or at least the ones you're authorized to see). (client-to-server and/or server-to-server)
 #
 # So we only care about implementing:
-#     - POST outbox, so you can add new posts to your website
-#     - GET  outbox, which returns all posts on your website
+#   - POST outbox, so you can add new posts to your website
+#     - Create https://www.w3.org/TR/activitystreams-vocabulary/#dfn-create
+#     - Delete https://www.w3.org/TR/activitystreams-vocabulary/#dfn-delete
+#     - Update https://www.w3.org/TR/activitystreams-vocabulary/#dfn-update
+#   - GET  outbox, which returns all posts on your website
 #
 # We implement GET inbox only to return no posts without error
 #
@@ -47,7 +50,7 @@ class Actors(object):
             'tools.encode.on' : True,
             'tools.encode.encoding' : 'utf-8',
             'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'application/json')],
+            'tools.response_headers.headers': [('Content-Type', 'application/ld+json')],
         }
 
     def _cp_dispatch(self, vpath):
