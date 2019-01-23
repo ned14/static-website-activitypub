@@ -1,9 +1,9 @@
 from __future__ import absolute_import, print_function
 import sys, os, cherrypy, json
 from configargparse import ArgParser, YAMLConfigFileParser
-from root import Root
+from .root import Root
 
-version='0.01'
+version='0.10'
     
 def abspath(path):
     if not path:

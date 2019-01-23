@@ -1,5 +1,5 @@
 from __future__ import absolute_import, print_function
-import unittest, cherrypy, sys, os, inspect, json
+import unittest, cherrypy, sys, os, inspect, json, static_website_activitypub
 
 try:
     from urllib import urlencode
@@ -9,16 +9,6 @@ try:
     from StringIO import StringIO
 except:
     from io import StringIO
-try:
-    import static_website_activitypub
-except:
-    current_dir = os.path.dirname(os.path.abspath(inspect.getsourcefile(lambda:0)))
-    parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
-    sys.path.insert(0, parent_dir)
-    sys.path.insert(0, os.path.join(parent_dir, 'static_website_activitypub'))
-    import static_website_activitypub
-    sys.path.pop(0)
-    sys.path.pop(0)
 
 class TestCase(unittest.TestCase):
     @classmethod

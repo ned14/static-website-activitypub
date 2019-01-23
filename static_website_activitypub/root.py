@@ -1,7 +1,7 @@
 from __future__ import absolute_import, print_function
 import cherrypy
-from well_known import WellKnown
-from actors import Actors
+from .well_known import WellKnown
+from .actors import Actors
     
 class Root(object):
     """The root website implementation"""
