@@ -20,7 +20,7 @@ setup(
     package_data={'static_website_activitypub' : ['../LICENSE']},
     test_suite='tests',
     entry_points={
-        'console_scripts': [ 'static-website-activitypub=static_website_activitypub:main' ]
+        'console_scripts': [ 'static-website-activitypub=static_website_activitypub:invoke_main' ]
     },
     install_requires=['ConfigArgParse'],
     license='Apache',
