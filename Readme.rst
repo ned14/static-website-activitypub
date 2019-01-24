@@ -9,6 +9,8 @@ Static Website ActivityPub
 
 PyPI: https://pypi.python.org/pypi/static-website-activitypub Github: https://github.com/ned14/static-website-activitypub
 
+Travis master branch all tests passing for Python v3: |travis|
+
 **Note that this project is currently in alpha, and should not be used by other people.**
 
 Implemented:
